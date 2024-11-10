@@ -1,0 +1,40 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import cv2
+
+from google.colab.patches import cv2_imshow
+
+img = cv2.imread("/content/zebra.jpeg")
+cv2_imshow(img)
+
+def draw_line(img,pt1,pt2,color,thickness):
+  cv2.line(img,pt1,pt2,color,thickness)
+
+def draw_text(img,text,pt,color,thickness):
+  cv2.putText(img,text,pt,cv2.FONT_HERSHEY_SIMPLEX,1,color,thickness)
+
+c
+
+def draw_circle(img,center,radius,color,thickness):
+  cv2.circle(img,center,radius,color,thickness)
+
+def draw_ellipse(img,center,axes,angle,color,thickness):
+  cv2.ellipse(img,center,axes,angle,0,360,color,thickness)
+
+img_copy = img.copy()
+
+cv2.line(img_copy,(0,0),(100,100),(255,0,0),5)
+
+draw_line(img_copy,(100,100),(200,200), (255,0,0),2)
+
+draw_text(img_copy,("hello"),(100,100),(255,0,0),2)
+
+draw_circle(img_copy,(100,100),50,(255,0,0),2)
+draw_rectangle(img_copy,(100,100),(200,200),(255,0,0),2)
+draw_ellipse(img_copy,(100,100),(50,50),0,(255,0,0),2)
+
+plt.imshow(img_copy)
+cv2.waitKey(0)
+
+cv2.destroyAllWindows()

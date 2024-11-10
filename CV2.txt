@@ -1,0 +1,25 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+img = plt.imread('/content/zebra.jpeg', 0)
+
+img_resize = cv2.resize(img,(300,300))
+plt.imshow(img_resize);
+
+img_crop = img[100:300, 200:500]
+plt.imshow(img_crop);
+cv2.waitKey(0)
+
+thresholded_img = cv2.threshold(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), 125, 255, cv2.THRESH_BINARY)[1]
+plt.imshow(thresholded_img);
+
+contours,_ = cv2.findContours(thresholded_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+contour_img = img.copy()
+cv2.drawContours(contour_img, contours, -1, (0,255,0), 2)
+plt.imshow(contour_img);
+
+detector = cv2.SimpleBlobDetector_create()
+keypoints = detector.detect(img)
+blob_img = img.copy()
+cv2.drawKeypoints(blob_img, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+plt.imshow(blob_img);

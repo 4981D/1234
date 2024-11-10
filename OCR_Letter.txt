@@ -1,0 +1,67 @@
+# data => letterdata.csv
+# location => https://mitu.co.in/dataset
+
+import pandas as pd
+
+df = pd.read_csv('letterdata.csv')
+df.head()
+
+# separate input and output
+
+x = df.drop('letter', axis = 1) # input
+y = df['letter']
+
+x;
+y;
+
+# standard scaling
+from sklearn.preprocessing import StandardScaler
+sca = StandardScaler()
+x_scaled = sca.fit_transform(x)
+
+# label encode
+from sklearn.preprocessing import LabelEncoder
+enc = LabelEncoder()
+y_enc = enc.fit_transform(y)
+
+y_enc
+
+import tensorflow
+
+from tensorflow.keras.utils import to_categorical
+y_cat = to_categorical(y_enc)
+
+from sklearn.model_selection import train_test_split
+
+x_train, x_test, y_train, y_test = train_test_split(x_scaled, y_cat,
+                                                   random_state= 0,
+                                                   test_size= 0.2)
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+
+model = Sequential()
+
+model.add(Dense(64, input_shape = (x_train.shape[1],), activation = 'relu'))
+model.add(Dropout(0.1))
+
+model.add(Dense(64, activation = 'relu'))
+model.add(Dropout(0.1))
+
+model.add(Dense(64, activation = 'relu'))
+model.add(Dropout(0.1))
+
+model.add(Dense(26, activation = 'softmax'))
+
+import warnings
+warnings.filterwarnings('ignore')
+
+model.summary()
+
+model.compile(optimizer= 'adam', loss = 'categorical_crossentropy',
+              metrics = ['accuracy'])
+
+hist = model.fit(x_train, y_train, epochs= 30, batch_size = 32,
+                 validation_data=(x_test, y_test), verbose = 2)
+
+model.evaluate(x_test, y_test)
